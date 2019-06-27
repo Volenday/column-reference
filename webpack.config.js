@@ -1,5 +1,4 @@
 const webpack = require('webpack');
-const path = require('path');
 
 module.exports = {
 	mode: 'production',
@@ -52,6 +51,12 @@ module.exports = {
 		filename: '[name].min.js',
 		chunkFilename: '[name].[chunkhash].chunk.min.js',
 		libraryTarget: 'commonjs2'
+	},
+	externals: {
+		lodash: 'commonjs2 lodash',
+		react: 'commonjs2 react',
+		'react-dom': 'commonjs2 react-dom',
+		'react-select': 'commonjs2 react-select'
 	},
 	plugins: [
 		new webpack.optimize.AggressiveMergingPlugin(),
