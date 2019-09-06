@@ -1,6 +1,6 @@
 {
 	"name": "@volenday/column-reference",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"private": false,
 	"license": "MIT",
 	"author": "Jerome Miranda <jerome.m.miranda@gmail.com>",
@@ -11,16 +11,16 @@
 	},
 	"main": "dist/index.min.js",
 	"peerDependencies": {
-		"lodash": "~4.17.11",
-		"react": "~16.8.6",
-		"react-dom": "~16.8.6",
-		"react-select": "~3.0.4"
+		"antd": "~3.23.1",
+		"lodash": "~4.17.15",
+		"react": "~16.9.0",
+		"react-dom": "~16.9.0"
 	},
 	"dependencies": {
+		"antd": "~3.23.1",
 		"lodash": "~4.17.15",
 		"react": "~16.9.0",
 		"react-dom": "~16.9.0",
-		"react-select": "~3.0.4",
 		"webpack": "~4.39.3"
 	},
 	"devDependencies": {

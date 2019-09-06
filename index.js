@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import ReactSelect from 'react-select';
 import keyBy from 'lodash/keyBy';
+import { Select } from 'antd';
+import 'antd/es/select/style/css';
 
 import { GetValue } from './utils';
 
@@ -30,17 +31,28 @@ export default props => {
 			display: 'flex',
 			alignItems: 'center'
 		},
-		Cell: ({ index, original, value }) => {
+		Cell: ({ original, value = {} }) => {
 			if (editable) {
+				//if usertypes
+				if (typeof value.Level != 'undefined') {
+					if (!optionsObj[value.Id]) {
+						return <span>{value.Name}</span>;
+					}
+				}
+
 				return (
-					<div style={{ width: '100%' }}>
-						<ReactSelect
-							inputId={`${id}-${index}-cell`}
-							value={value ? (optionsObj[value.Id] ? optionsObj[value.Id] : null) : null}
-							onChange={e => onChange(e ? { Id: original.Id, [id]: e.value } : null)}
-							options={options}
-						/>
-					</div>
+					<Select
+						mode={multiple ? 'multiple' : 'default'}
+						showSearch
+						style={{ width: '100%' }}
+						onChange={e => onChange({ Id: original.Id, [id]: e })}
+						value={multiple ? (Array.isArray(value) ? value.map(d => d.Id) : []) : value ? value.Id : ''}>
+						{options.map(d => (
+							<Select.Option key={d.value} value={d.value}>
+								{d.label}
+							</Select.Option>
+						))}
+					</Select>
 				);
 			}
 
@@ -60,7 +72,7 @@ export default props => {
 		},
 		Filter: ({ filter, onChange }) => {
 			return (
-				<Select
+				<Filter
 					filterIds={filterIds}
 					onChange={onChange}
 					options={options}
@@ -71,16 +83,14 @@ export default props => {
 	};
 };
 
-class Select extends Component {
+class Filter extends Component {
 	render() {
 		let { options } = this.props;
 		const { filterIds = [], onChange, value } = this.props;
 
-		options = options.length == 1 ? options : [{ value: 'all', label: 'All' }, ...options];
+		options = [{ value: 'all', label: 'All' }, ...options];
 		options = filterIds.length != 0 ? options.filter(d => filterIds.includes(d.Id)) : options;
-		const optionsObj = keyBy(options, 'value');
 
-		// !isFetching &&
 		if (options.length == 1) {
 			if (options[0].value == 'all') {
 				return (
@@ -92,13 +102,18 @@ class Select extends Component {
 		}
 
 		return (
-			<div style={{ width: '100%' }}>
-				<ReactSelect
-					onChange={e => onChange(e.value === 'all' ? '' : e.value)}
-					options={options}
-					value={Array.isArray(value) ? optionsObj[value[0]] : optionsObj[value]}
-				/>
-			</div>
+			<Select
+				showSearch
+				style={{ width: '100%' }}
+				onChange={e => onChange(e)}
+				placeholder="Search..."
+				value={Array.isArray(value) ? value[0] : value}>
+				{options.map(d => (
+					<Select.Option key={d.value} value={d.value}>
+						{d.label}
+					</Select.Option>
+				))}
+			</Select>
 		);
 	}
 }
