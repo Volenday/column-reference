@@ -34,9 +34,11 @@ export default props => {
 		Cell: ({ original, value = {} }) => {
 			if (editable) {
 				//if usertypes
-				if (typeof value.Level != 'undefined') {
-					if (!optionsObj[value.Id]) {
-						return <span>{value.Name}</span>;
+				if (value) {
+					if (typeof value.Level != 'undefined') {
+						if (!optionsObj[value.Id]) {
+							return <span>{value.Name}</span>;
+						}
 					}
 				}
 
