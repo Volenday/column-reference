@@ -17,6 +17,7 @@ export default props => {
 		onChange,
 		options = [],
 		style = {},
+		account = {},
 		...defaultProps
 	} = props;
 
@@ -77,6 +78,9 @@ export default props => {
 		Filter: ({ filter, onChange }) => {
 			return (
 				<Filter
+					editable={editable}
+					account={account}
+					dropdown={dropdown}
 					filterIds={filterIds}
 					onChange={onChange}
 					options={options}
@@ -90,7 +94,7 @@ export default props => {
 class Filter extends Component {
 	render() {
 		let { options } = this.props;
-		const { filterIds = [], onChange, value } = this.props;
+		const { filterIds = [], onChange, value, account, dropdown, editable } = this.props;
 
 		options = [{ value: 'all', label: 'All' }, ...options];
 		options = filterIds.length != 0 ? options.filter(d => filterIds.includes(d.Id)) : options;
@@ -103,6 +107,30 @@ class Filter extends Component {
 					</div>
 				);
 			}
+		}
+
+		if (!editable) {
+			let newValue = '';
+			if (typeof dropdown === 'string') {
+				newValue = account[dropdown];
+			} else {
+				let fieldArr = [];
+				const { fields, separator } = dropdown;
+
+				if (fields.length) {
+					fields.map(f => {
+						fieldArr.push(account[f]);
+					});
+				}
+
+				newValue = fieldArr.join(separator);
+			}
+
+			return (
+				<div style={{ width: '100%' }}>
+					<span>{newValue}</span>
+				</div>
+			);
 		}
 
 		return (
