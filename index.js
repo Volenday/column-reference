@@ -32,6 +32,8 @@ export default props => {
 			alignItems: 'center'
 		},
 		Cell: ({ original, value = {} }) => {
+			if (typeof value == 'undefined') return null;
+
 			if (editable) {
 				//if usertypes
 				if (value) {
