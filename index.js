@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import keyBy from 'lodash/keyBy';
+import { keyBy } from 'lodash';
 import { Select } from 'antd';
 
 import { GetValue } from './utils';
