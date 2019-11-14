@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import keyBy from 'lodash/keyBy';
 import { Select } from 'antd';
-import 'antd/es/select/style/css';
 
 import { GetValue } from './utils';
 

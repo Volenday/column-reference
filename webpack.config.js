@@ -53,10 +53,10 @@ module.exports = {
 		libraryTarget: 'commonjs2'
 	},
 	externals: {
-		antd: 'commonjs2 antd',
-		lodash: 'commonjs2 lodash',
-		react: 'commonjs2 react',
-		'react-dom': 'commonjs2 react-dom'
+		antd: 'antd',
+		lodash: 'lodash',
+		react: 'react',
+		'react-dom': 'react-dom'
 	},
 	plugins: [
 		new webpack.optimize.AggressiveMergingPlugin(),
