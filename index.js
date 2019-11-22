@@ -17,7 +17,6 @@ export default props => {
 		options = [],
 		style = {},
 		account = {},
-		filterOptions = [],
 		...defaultProps
 	} = props;
 
@@ -83,7 +82,7 @@ export default props => {
 					dropdown={dropdown}
 					filterIds={filterIds}
 					onChange={onChange}
-					options={filterOptions}
+					options={options}
 					value={filter ? filter.value : defaultValue}
 				/>
 			);
