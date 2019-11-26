@@ -17,6 +17,8 @@ export default props => {
 		options = [],
 		style = {},
 		account = {},
+		filterOptions = [],
+		getValue = () => {},
 		...defaultProps
 	} = props;
 
@@ -44,6 +46,8 @@ export default props => {
 					}
 				}
 
+				const newOptions = getValue(value);
+
 				return (
 					<Select
 						mode={multiple ? 'multiple' : 'default'}
@@ -51,11 +55,17 @@ export default props => {
 						style={{ width: '100%' }}
 						onChange={e => onChange({ Id: original.Id, [id]: e })}
 						value={multiple ? (Array.isArray(value) ? value.map(d => d.Id) : []) : value ? value.Id : ''}>
-						{options.map(d => (
-							<Select.Option key={d.value} value={d.value}>
-								{d.label}
-							</Select.Option>
-						))}
+						{newOptions.length
+							? newOptions.map(d => (
+									<Select.Option key={d.value} value={d.value}>
+										{d.label}
+									</Select.Option>
+							  ))
+							: options.map(d => (
+									<Select.Option key={d.value} value={d.value}>
+										{d.label}
+									</Select.Option>
+							  ))}
 					</Select>
 				);
 			}
@@ -82,7 +92,7 @@ export default props => {
 					dropdown={dropdown}
 					filterIds={filterIds}
 					onChange={onChange}
-					options={options}
+					options={filterOptions}
 					value={filter ? filter.value : defaultValue}
 				/>
 			);
