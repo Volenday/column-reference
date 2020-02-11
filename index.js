@@ -141,13 +141,14 @@ class Filter extends Component {
 				</div>
 			);
 		}
-
+		console.log(value);
 		return (
 			<Select
 				showSearch
 				style={{ width: '100%' }}
 				onChange={e => onChange(e)}
 				placeholder="Search..."
+				optionFilterProp="children"
 				value={Array.isArray(value) ? value[0] : value}>
 				{options.map(d => (
 					<Select.Option key={d.value} value={d.value}>
