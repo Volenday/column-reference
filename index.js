@@ -52,6 +52,7 @@ export default props => {
 					<Select
 						mode={multiple ? 'multiple' : 'default'}
 						showSearch
+						optionFilterProp="children"
 						style={{ width: '100%' }}
 						onChange={e => onChange({ Id: original.Id, [id]: e })}
 						value={multiple ? (Array.isArray(value) ? value.map(d => d.Id) : []) : value ? value.Id : ''}>
@@ -148,6 +149,7 @@ class Filter extends Component {
 				style={{ width: '100%' }}
 				onChange={e => onChange(e)}
 				placeholder="Search..."
+				optionFilterProp="children"
 				value={Array.isArray(value) ? value[0] : value}>
 				{options.map(d => (
 					<Select.Option key={d.value} value={d.value}>
