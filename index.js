@@ -6,16 +6,13 @@ import { GetValue } from './utils';
 
 export default props => {
 	const {
-		defaultValue = 'all',
 		dropdown,
 		editable = false,
 		filterIds = [],
-		headerStyle = {},
 		id,
 		multiple,
 		onChange,
 		options = [],
-		style = {},
 		account = {},
 		filterOptions = [],
 		getValue = () => {},
@@ -26,15 +23,8 @@ export default props => {
 
 	return {
 		...defaultProps,
-		style: { ...style, overflow: editable ? 'visible' : 'hidden', display: 'flex', alignItems: 'center' },
-		headerStyle: {
-			...headerStyle,
-			overflow: 'visible',
-			display: 'flex',
-			alignItems: 'center'
-		},
-		Cell: ({ original, value = {} }) => {
-			if (typeof value == 'undefined') return null;
+		Cell: ({ row, value = {} }) => {
+			if (typeof value === 'undefined') return null;
 
 			if (editable) {
 				//if usertypes
@@ -54,7 +44,7 @@ export default props => {
 						showSearch
 						optionFilterProp="children"
 						style={{ width: '100%' }}
-						onChange={e => onChange({ Id: original.Id, [id]: e })}
+						onChange={e => onChange({ Id: row.Id, [id]: e })}
 						value={multiple ? (Array.isArray(value) ? value.map(d => d.Id) : []) : value ? value.Id : ''}>
 						{newOptions.length
 							? newOptions.map(d => (
@@ -85,16 +75,16 @@ export default props => {
 				return fields.map(f => GetValue(f, value)).join(separator);
 			}
 		},
-		Filter: ({ filter, onChange }) => {
+		Filter: ({ column: { filterValue, setFilter } }) => {
 			return (
 				<Filter
 					editable={editable}
 					account={account}
 					dropdown={dropdown}
 					filterIds={filterIds}
-					onChange={onChange}
+					onChange={setFilter}
 					options={filterOptions}
-					value={filter ? filter.value : defaultValue}
+					value={filterValue ? filterValue : 'all'}
 				/>
 			);
 		}
@@ -147,7 +137,7 @@ class Filter extends Component {
 			<Select
 				showSearch
 				style={{ width: '100%' }}
-				onChange={e => onChange(e)}
+				onChange={e => onChange(e !== 'all' ? e : '')}
 				placeholder="Search..."
 				optionFilterProp="children"
 				value={Array.isArray(value) ? value[0] : value}>
