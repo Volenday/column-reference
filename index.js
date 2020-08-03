@@ -23,7 +23,7 @@ export default props => {
 
 	return {
 		...defaultProps,
-		Cell: ({ row, value = {} }) => {
+		Cell: ({ row: { original }, value = {} }) => {
 			if (typeof value === 'undefined') return null;
 
 			if (editable) {
@@ -44,7 +44,7 @@ export default props => {
 						showSearch
 						optionFilterProp="children"
 						style={{ width: '100%' }}
-						onChange={e => onChange({ Id: row.Id, [id]: e })}
+						onChange={e => onChange({ Id: original.Id, [id]: e })}
 						value={multiple ? (Array.isArray(value) ? value.map(d => d.Id) : []) : value ? value.Id : ''}>
 						{newOptions.length
 							? newOptions.map(d => (
