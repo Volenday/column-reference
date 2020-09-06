@@ -65,14 +65,18 @@ export default props => {
 			const { fields, separator } = dropdown;
 
 			if (multiple) {
-				return value.map((d, i) => (
-					<div key={i}>
-						<span>{fields.map(f => GetValue(f, d)).join(separator)}</span>
-						<br />
+				return (
+					<div>
+						{value.map((d, i) => (
+							<div key={i}>
+								<span>{fields.map(f => GetValue(f, d)).join(separator)}</span>
+								<br />
+							</div>
+						))}
 					</div>
-				));
+				);
 			} else {
-				return fields.map(f => GetValue(f, value)).join(separator);
+				return <span>{fields.map(f => GetValue(f, value)).join(separator)}</span>;
 			}
 		},
 		Filter: ({ column: { filterValue, setFilter } }) => {
