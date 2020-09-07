@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { keyBy } from 'lodash';
 import { Select } from 'antd';
 
@@ -13,7 +13,6 @@ export default props => {
 		multiple,
 		onChange,
 		options = [],
-		account = {},
 		filterOptions = [],
 		getValue = () => {},
 		...defaultProps
@@ -82,9 +81,6 @@ export default props => {
 		Filter: ({ column: { filterValue, setFilter } }) => {
 			return (
 				<Filter
-					editable={editable}
-					account={account}
-					dropdown={dropdown}
 					filterIds={filterIds}
 					onChange={setFilter}
 					options={filterOptions}
@@ -95,62 +91,33 @@ export default props => {
 	};
 };
 
-class Filter extends Component {
-	render() {
-		let { options } = this.props;
-		const { filterIds = [], onChange, value, account, dropdown, editable } = this.props;
+const Filter = ({ filterIds = [], onChange, options, value }) => {
+	options = [{ value: 'all', label: 'All' }, ...options];
+	options = filterIds.length !== 0 ? options.filter(d => filterIds.includes(d.Id)) : options;
 
-		options = [{ value: 'all', label: 'All' }, ...options];
-		options = filterIds.length != 0 ? options.filter(d => filterIds.includes(d.Id)) : options;
-
-		if (options.length == 1) {
-			if (options[0].value == 'all') {
-				return (
-					<div style={{ width: '100%' }}>
-						<span>{options[0].label}</span>
-					</div>
-				);
-			}
-		}
-
-		if (!editable) {
-			let newValue = '';
-			if (typeof dropdown === 'string') {
-				newValue = account[dropdown];
-			} else {
-				let fieldArr = [];
-				const { fields, separator } = dropdown;
-
-				if (fields.length) {
-					fields.map(f => {
-						fieldArr.push(account[f]);
-					});
-				}
-
-				newValue = fieldArr.join(separator);
-			}
-
+	if (options.length === 1) {
+		if (options[0].value === 'all')
 			return (
 				<div style={{ width: '100%' }}>
-					<span>{newValue}</span>
+					<span>{options[0].label}</span>
 				</div>
 			);
-		}
-
-		return (
-			<Select
-				showSearch
-				style={{ width: '100%' }}
-				onChange={e => onChange(e !== 'all' ? e : '')}
-				placeholder="Search..."
-				optionFilterProp="children"
-				value={Array.isArray(value) ? value[0] : value}>
-				{options.map(d => (
-					<Select.Option key={d.value} value={d.value}>
-						{d.label}
-					</Select.Option>
-				))}
-			</Select>
-		);
 	}
-}
+
+	return (
+		<Select
+			allowClear
+			showSearch
+			style={{ width: '100%' }}
+			onChange={e => onChange(e !== 'all' ? e : '')}
+			placeholder="Search..."
+			optionFilterProp="children"
+			value={Array.isArray(value) ? value[0] : value}>
+			{options.map(d => (
+				<Select.Option key={d.value} value={d.value}>
+					{d.label}
+				</Select.Option>
+			))}
+		</Select>
+	);
+};
