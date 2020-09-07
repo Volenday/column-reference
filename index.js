@@ -64,6 +64,7 @@ export default props => {
 			const { fields, separator } = dropdown;
 
 			if (multiple) {
+				if (!Array.isArray(value)) return null;
 				return (
 					<div>
 						{value.map((d, i) => (
