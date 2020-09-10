@@ -1,6 +1,6 @@
 {
 	"name": "@volenday/column-reference",
-	"version": "3.1.1",
+	"version": "3.1.2",
 	"private": false,
 	"license": "MIT",
 	"author": "Volenday <developers@volenday.com>",
@@ -14,7 +14,8 @@
 		"antd": "^3.26.16",
 		"lodash": "~4.17.15",
 		"react": "^16.12.0",
-		"react-dom": "^16.12.0"
+		"react-dom": "^16.12.0",
+		"react-hook-form": "^6.7.2"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.11.6",
@@ -44,7 +45,7 @@
 		"babel-plugin-react-html-attrs": "^3.0.5",
 		"compression-webpack-plugin": "^5.0.2",
 		"core-js": "^3.6.5",
-		"css-loader": "^4.2.2",
+		"css-loader": "^4.3.0",
 		"file-loader": "^6.1.0",
 		"node-sass": "^4.14.1",
 		"sass-loader": "^10.0.2",

@@ -57,7 +57,8 @@ module.exports = {
 		antd: 'antd',
 		lodash: 'lodash',
 		react: 'react',
-		'react-dom': 'react-dom'
+		'react-dom': 'react-dom',
+		'react-hook-form': 'react-hook-form'
 	},
 	plugins: [
 		new webpack.optimize.AggressiveMergingPlugin(),
