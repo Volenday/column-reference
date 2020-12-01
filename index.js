@@ -1,9 +1,10 @@
 import React, { memo, Suspense, useRef } from 'react';
 import { keyBy } from 'lodash';
 import { Select, Skeleton } from 'antd';
-import { Controller, useForm } from 'react-hook-form';
 
 import { GetValue } from './utils';
+
+const browser = typeof process.browser !== 'undefined' ? process.browser : true;
 
 export default ({
 	dropdown,
@@ -21,29 +22,31 @@ export default ({
 
 	return {
 		...defaultProps,
-		Cell: props => (
-			<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
-				<Cell
-					{...props}
-					other={{
-						dropdown,
-						editable,
-						getValue,
-						id,
-						multiple,
-						onChange,
-						options,
-						optionsObj,
-						styles: { width: '100%' }
-					}}
-				/>
-			</Suspense>
-		),
-		Filter: props => (
-			<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
-				<Filter {...props} other={{ filterIds, options: filterOptions }} />
-			</Suspense>
-		)
+		Cell: props =>
+			browser ? (
+				<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
+					<Cell
+						{...props}
+						other={{
+							dropdown,
+							editable,
+							getValue,
+							id,
+							multiple,
+							onChange,
+							options,
+							optionsObj,
+							styles: { width: '100%' }
+						}}
+					/>
+				</Suspense>
+			) : null,
+		Filter: props =>
+			browser ? (
+				<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
+					<Filter {...props} other={{ filterIds, options: filterOptions }} />
+				</Suspense>
+			) : null
 	};
 };
 
@@ -56,6 +59,7 @@ const Cell = memo(
 		if (typeof value === 'undefined') return null;
 
 		if (editable) {
+			const { Controller, useForm } = require('react-hook-form');
 			const formRef = useRef();
 
 			const { control, handleSubmit } = useForm({
@@ -135,6 +139,8 @@ const Cell = memo(
 );
 
 const Filter = memo(({ column: { filterValue, setFilter }, other: { filterIds = [], options } }) => {
+	const { Controller, useForm } = require('react-hook-form');
+
 	options = [{ value: 'all', label: 'All' }, ...options];
 	options = filterIds.length !== 0 ? options.filter(d => filterIds.includes(d.Id)) : options;
 
