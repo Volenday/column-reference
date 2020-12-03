@@ -1,5 +1,5 @@
 import React, { memo, Suspense, useRef } from 'react';
-import { keyBy } from 'lodash';
+import { drop, keyBy } from 'lodash';
 import { Select, Skeleton } from 'antd';
 
 import { GetValue } from './utils';
@@ -133,6 +133,7 @@ const Cell = memo(
 				</div>
 			);
 		} else {
+			if (typeof dropdown === 'string') return <span>{dropdown}</span>;
 			return <span>{fields.map(f => GetValue(f, value)).join(separator)}</span>;
 		}
 	}
