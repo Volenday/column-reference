@@ -178,6 +178,7 @@ const Filter = memo(({ column: { filterValue, setFilter }, other: { filterIds = 
 						optionFilterProp="children"
 						placeholder="Search..."
 						showSearch
+						style={{ width: '100%' }}
 						value={value}>
 						{options.map(d => (
 							<Select.Option key={d.value} value={d.value}>
