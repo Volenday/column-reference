@@ -122,16 +122,7 @@ const Cell = memo(
 
 		if (multiple) {
 			if (!Array.isArray(value)) return null;
-			return (
-				<div>
-					{value.map((d, i) => (
-						<div key={i}>
-							<span>{fields.map(f => GetValue(f, d)).join(separator)}</span>
-							<br />
-						</div>
-					))}
-				</div>
-			);
+			return <div>{value.map(d => fields.map(f => GetValue(f, d)).join(separator)).join(', ')}</div>;
 		} else {
 			if (typeof dropdown === 'string') return <span>{dropdown}</span>;
 			return <span>{fields.map(f => GetValue(f, value)).join(separator)}</span>;
