@@ -1,6 +1,8 @@
 import React, { memo, Suspense, useRef } from 'react';
-import { drop, keyBy } from 'lodash';
+import { keyBy } from 'lodash';
 import { Select, Skeleton } from 'antd';
+
+import Filter from './filter';
 
 import { GetValue } from './utils';
 
@@ -41,12 +43,13 @@ export default ({
 					/>
 				</Suspense>
 			) : null,
-		Filter: props =>
-			browser ? (
+		Filter: props => {
+			return browser ? (
 				<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
-					<Filter {...props} other={{ filterIds, options: filterOptions }} />
+					<Filter {...props} dropdown={dropdown} id={id} options={filterOptions} />
 				</Suspense>
-			) : null
+			) : null;
+		}
 	};
 };
 
@@ -129,56 +132,3 @@ const Cell = memo(
 		}
 	}
 );
-
-const Filter = memo(({ column: { filterValue, setFilter }, other: { filterIds = [], options } }) => {
-	const { Controller, useForm } = require('react-hook-form');
-
-	options = [{ value: 'all', label: 'All' }, ...options];
-	options = filterIds.length !== 0 ? options.filter(d => filterIds.includes(d.Id)) : options;
-
-	if (options.length === 1) {
-		if (options[0].value === 'all')
-			return (
-				<div style={{ width: '100%' }}>
-					<span>{options[0].label}</span>
-				</div>
-			);
-	}
-
-	const { control, handleSubmit } = useForm({
-		defaultValues: { filter: Array.isArray(filterValue) ? filterValue[0] : filterValue }
-	});
-
-	const formRef = useRef();
-
-	const submit = data => setFilter(data.filter !== 'all' ? data.filter : '');
-
-	return (
-		<form onSubmit={handleSubmit(submit)} ref={formRef} style={{ width: '100%' }}>
-			<Controller
-				control={control}
-				name="filter"
-				render={({ name, onChange, value }) => (
-					<Select
-						allowClear
-						name={name}
-						onChange={e => {
-							onChange(e);
-							formRef.current.dispatchEvent(new Event('submit', { cancelable: true }));
-						}}
-						optionFilterProp="children"
-						placeholder="Search..."
-						showSearch
-						style={{ width: '100%' }}
-						value={value}>
-						{options.map(d => (
-							<Select.Option key={d.value} value={d.value}>
-								{d.label}
-							</Select.Option>
-						))}
-					</Select>
-				)}
-			/>
-		</form>
-	);
-});

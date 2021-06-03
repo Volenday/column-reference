@@ -55,6 +55,7 @@ module.exports = {
 	},
 	externals: {
 		antd: 'antd',
+		'@ant-design/icons': '@ant-design/icons',
 		lodash: 'lodash',
 		react: 'react',
 		'react-dom': 'react-dom',
