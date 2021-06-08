@@ -54,7 +54,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 				fields
 					.map(f => GetValue(f, d))
 					.join(separator)
-					.match(value, 'i')
+					.match(new RegExp(value, 'i'))
 			)
 		);
 	};
