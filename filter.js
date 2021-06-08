@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Checkbox, Input, List, Popover } from 'antd';
+import { Checkbox, Input, List, Menu, Popover } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import { remove, uniq } from 'lodash';
 
@@ -61,20 +61,31 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 
 	const renderPopoverContent = () => {
 		return (
-			<div>
-				<Input.Search
-					allowClear
-					onKeyUp={e => handleSearch(e.target.value)}
-					onSearch={handleSearch}
-					placeholder="Search"
-				/>
-				<List dataSource={newOptions} renderItem={renderItem} style={{ height: 250, overflowY: 'scroll' }} />
-			</div>
+			<Menu>
+				<Menu.ItemGroup title="Filter">
+					<Input.Search
+						allowClear
+						onKeyUp={e => handleSearch(e.target.value)}
+						onSearch={handleSearch}
+						placeholder="Search"
+					/>
+					<List
+						dataSource={newOptions}
+						renderItem={renderItem}
+						style={{ height: 250, overflowY: 'scroll' }}
+					/>
+				</Menu.ItemGroup>
+				<Menu.ItemGroup title="Column Settings">
+					<Menu.Item>
+						<Checkbox {...column.getToggleHiddenProps()}>Visible</Checkbox>
+					</Menu.Item>
+				</Menu.ItemGroup>
+			</Menu>
 		);
 	};
 
 	return (
-		<Popover content={renderPopoverContent} title="Filter" trigger="click">
+		<Popover content={renderPopoverContent} trigger="click">
 			<FilterOutlined style={{ cursor: 'pointer' }} />
 		</Popover>
 	);
