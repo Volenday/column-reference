@@ -6,7 +6,7 @@ import { GetValue } from './utils';
 
 const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	const [selected, setSelected] = useState([]);
-	const [newOptions, setNewOptions] = useState(options);
+	const [newOptions, setNewOptions] = useState([{ Id: '', Name: '(Blank)' }, ...options]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [sort, setSort] = useState('');
 
@@ -15,7 +15,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	const withFilterValue = column.filterValue ? (column.filterValue.length !== 0 ? true : false) : false;
 
 	useEffect(() => {
-		if (!!column.filterValue) setSelected(column.filterValue);
+		if (!!column.filterValue) setSelected(column.filterValue['$in']);
 	}, [JSON.stringify(column.filterValue)]);
 
 	useEffect(() => {
@@ -31,7 +31,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 		return (
 			<List.Item style={{ cursor: 'pointer', padding: '5px 0px' }}>
 				<Checkbox checked={selected.includes(item.Id)} onChange={() => selectItem(item.Id)}>
-					{fields.map(f => GetValue(f, item)).join(separator)}
+					{item.Id === '' ? item.Name : fields.map(f => GetValue(f, item)).join(separator)}
 				</Checkbox>
 			</List.Item>
 		);
@@ -59,7 +59,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	};
 
 	const onOk = () => {
-		setFilter(id, selected);
+		setFilter(id, { $in: selected });
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? true : sort === 'DESC' ? false : '');
 		else column.clearSortBy();
