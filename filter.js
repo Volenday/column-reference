@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useMemo } from 'react';
 import { Button, Checkbox, Divider, Input, List, Popover } from 'antd';
 import { FilterFilled, FilterOutlined } from '@ant-design/icons';
 
@@ -9,14 +9,21 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	const [newOptions, setNewOptions] = useState([{ Id: '', Name: '(Blank)' }, ...options]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [sort, setSort] = useState('');
+	const [selectedAll, setSelectedtAll] = useState(false);
 
 	const { fields, separator } = dropdown;
 
 	const withFilterValue = column.filterValue ? (column.filterValue.length !== 0 ? true : false) : false;
 
 	useEffect(() => {
-		if (!!column.filterValue) setSelected(column.filterValue['$in']);
+		if (!!column.filterValue)
+			setSelected(column.filterValue['$in']),
+				setSelectedtAll(column.filterValue['$in'].length === options.length + 1 ? true : false);
 	}, [JSON.stringify(column.filterValue)]);
+
+	useEffect(() => {
+		setSelectedtAll(selected.length === options.length + 1 ? true : false);
+	}, [selected.length]);
 
 	useEffect(() => {
 		setSort(column.isSorted ? (column.isSortedDesc ? 'DESC' : 'ASC') : '');
@@ -39,10 +46,9 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 
 	const renderCount = () => {
 		if (!column.filterValue) return null;
-		if (!Array.isArray(column.filterValue)) return null;
-
-		if (column.filterValue.length === 0) return null;
-		return <span>({column.filterValue.length})</span>;
+		if (!Array.isArray(column.filterValue['$in'])) return null;
+		if (column.filterValue['$in'].length === 0) return null;
+		return <span>({column.filterValue['$in'].length})</span>;
 	};
 
 	const handleSearch = value => {
@@ -63,6 +69,17 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? true : sort === 'DESC' ? false : '');
 		else column.clearSortBy();
+	};
+
+	const onSelectAll = () => {
+		if (selectedAll) return onClearAll();
+		setSelected([...options.map(d => d.Id), '']);
+		setSelectedtAll(true);
+	};
+
+	const onClearAll = () => {
+		setSelected([]);
+		setSelectedtAll(false);
 	};
 
 	const renderPopoverContent = () => {
@@ -88,7 +105,17 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 				</div>
 				<Divider style={{ margin: '10px 0px' }} />
 				<div>
-					<h4>Filter {renderCount()}</h4>
+					<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+						<h4>Filter {renderCount()}</h4>
+						<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+							<Checkbox checked={selectedAll} onClick={() => onSelectAll()} style={{ fontSize: '15px' }}>
+								Select All
+							</Checkbox>
+							<Button onClick={() => onClearAll()} size="small" type="link" danger>
+								Clear All
+							</Button>
+						</div>
+					</div>
 					<Input.Search
 						allowClear
 						onKeyUp={e => handleSearch(e.target.value)}
