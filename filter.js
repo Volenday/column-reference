@@ -16,9 +16,8 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	const withFilterValue = column.filterValue ? (column.filterValue.length !== 0 ? true : false) : false;
 
 	useEffect(() => {
-		if (!!column.filterValue)
-			setSelected(column.filterValue['$in']),
-				setSelectedtAll(column.filterValue['$in'].length === options.length + 1 ? true : false);
+		if (!!column.filterValue) setSelected(column.filterValue);
+		if (column.filterValue) setSelectedtAll(column.filterValue.length === options.length + 1 ? true : false);
 	}, [JSON.stringify(column.filterValue)]);
 
 	useEffect(() => {
@@ -46,9 +45,9 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 
 	const renderCount = () => {
 		if (!column.filterValue) return null;
-		if (!Array.isArray(column.filterValue['$in'])) return null;
-		if (column.filterValue['$in'].length === 0) return null;
-		return <span>({column.filterValue['$in'].length})</span>;
+		if (!Array.isArray(column.filterValue)) return null;
+		if (column.filterValue.length === 0) return null;
+		return <span>({column.filterValue.length})</span>;
 	};
 
 	const handleSearch = value => {
@@ -65,7 +64,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	};
 
 	const onOk = () => {
-		setFilter(id, { $in: selected });
+		setFilter(id, selected);
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? true : sort === 'DESC' ? false : '');
 		else column.clearSortBy();
