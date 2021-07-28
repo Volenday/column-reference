@@ -8,7 +8,7 @@ import { GetValue } from './utils';
 
 const browser = typeof process.browser !== 'undefined' ? process.browser : true;
 
-export default ({
+const ColumnReference = ({
 	dropdown,
 	editable = false,
 	filterIds = [],
@@ -132,3 +132,5 @@ const Cell = memo(
 		}
 	}
 );
+
+export default ColumnReference;

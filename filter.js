@@ -1,11 +1,11 @@
-import React, { memo, useEffect, useState, useMemo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Button, Checkbox, Divider, Input, List, Popover } from 'antd';
 import { FilterFilled, FilterOutlined } from '@ant-design/icons';
 
 import { GetValue } from './utils';
 
 const Filter = ({ column, dropdown, id, options, setFilter }) => {
-	const [selected, setSelected] = useState([]);
+	const [selected, setSelected] = useState([{ Id: '', Name: '(Blank)' }, ...options]);
 	const [newOptions, setNewOptions] = useState([{ Id: '', Name: '(Blank)' }, ...options]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [sort, setSort] = useState('');
