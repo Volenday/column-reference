@@ -6,7 +6,7 @@ import { FixedSizeList } from 'react-window';
 import { GetValue } from './utils';
 
 const Filter = ({ column, dropdown, id, options, setFilter }) => {
-	const [selected, setSelected] = useState([{ Id: '', Name: '(Blank)' }, ...options]);
+	const [selected, setSelected] = useState(['', ...options.map(d => d.Id)]);
 	const [newOptions, setNewOptions] = useState([{ Id: '', Name: '(Blank)' }, ...options]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [sort, setSort] = useState('');
@@ -18,7 +18,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	const listCount = newOptions.length;
 
 	useEffect(() => {
-		if (!!column.filterValue) setSelected(column.filterValue);
+		if (!!column.filterValue) setSelected(prev => (column.filterValue.length === 0 ? prev : column.filterValue));
 		if (column.filterValue) setSelectedtAll(column.filterValue.length === options.length + 1 ? true : false);
 	}, [JSON.stringify(column.filterValue)]);
 
@@ -99,7 +99,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	};
 
 	const onOk = () => {
-		setFilter(id, selected);
+		setFilter(id, selectedAll ? [] : selected);
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? true : sort === 'DESC' ? false : '');
 		else column.clearSortBy();
@@ -176,7 +176,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 						<Button onClick={closePopover} type="default">
 							Cancel
 						</Button>
-						<Button onClick={onOk} type="primary">
+						<Button disabled={selected.length === 0} onClick={onOk} type="primary">
 							OK
 						</Button>
 					</div>
