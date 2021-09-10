@@ -100,11 +100,6 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	};
 
 	const onOk = () => {
-		console.log(isEqual(
-			options,
-				newOptions.filter(d => d.Name !== '(Blank)')
-		  ))
-		
 		setFilter(
 			id,
 			selectedAll
@@ -116,7 +111,6 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 					: newOptions.map(d => d.Id)
 				: selected
 		);
-	console.log(newOptions)
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? false : sort === 'DESC' ? true : '');
 		else column.clearSortBy();
