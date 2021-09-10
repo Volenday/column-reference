@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState, useCallback } from 'react';
 import { Button, Checkbox, Divider, Input, Popover } from 'antd';
 import { FilterFilled, FilterOutlined } from '@ant-design/icons';
 import { FixedSizeList } from 'react-window';
+import { isEqual } from 'lodash';
 
 import { GetValue } from './utils';
 
@@ -99,7 +100,17 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	};
 
 	const onOk = () => {
-		setFilter(id, selectedAll ? [] : selected);
+		setFilter(
+			id,
+			selectedAll
+				? isEqual(
+					options,
+						newOptions.filter(d => d.Name !== '(Blank)')
+				  )
+					? []
+					: newOptions.map(d => d.Id)
+				: selected
+		);
 
 		if (sort) column.toggleSortBy(sort === 'ASC' ? false : sort === 'DESC' ? true : '');
 		else column.clearSortBy();
