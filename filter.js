@@ -189,7 +189,11 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	const closePopover = () => setIsPopoverVisible(false);
 
 	return (
-		<Popover content={renderPopoverContent} trigger="click" visible={isPopoverVisible}>
+		<Popover
+			content={renderPopoverContent}
+			trigger="click"
+			visible={isPopoverVisible}
+			onVisibleChange={e => setIsPopoverVisible(e)}>
 			{withFilterValue ? (
 				<FilterFilled onClick={openPopover} style={{ cursor: 'pointer' }} />
 			) : (
