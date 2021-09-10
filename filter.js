@@ -101,7 +101,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 	const onOk = () => {
 		setFilter(id, selectedAll ? [] : selected);
 
-		if (sort) column.toggleSortBy(sort === 'ASC' ? true : sort === 'DESC' ? false : '');
+		if (sort) column.toggleSortBy(sort === 'ASC' ? false : sort === 'DESC' ? true : '');
 		else column.clearSortBy();
 	};
 
