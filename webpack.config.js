@@ -59,7 +59,6 @@ module.exports = {
 		lodash: 'lodash',
 		react: 'react',
 		'react-dom': 'react-dom',
-		'react-hook-form': 'react-hook-form',
 		'react-window': 'react-window'
 	},
 	plugins: [
