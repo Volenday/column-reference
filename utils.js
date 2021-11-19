@@ -10,7 +10,11 @@ export const GetValue = (fields, data) => {
 		let value = data[newFields.pop()];
 		if (value) {
 			while (newFields.length != 0) {
-				value = value[newFields.pop()];
+				const field = newFields.pop();
+				const newValue = typeof value[field] !== 'undefined' ? value[field] : null;
+				if (newValue !== null) {
+					value = newValue;
+				} else continue;
 			}
 			return value;
 		} else {
