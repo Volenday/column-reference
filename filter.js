@@ -1,12 +1,12 @@
 import React, { memo, useEffect, useState, useCallback } from 'react';
-import { Button, Checkbox, Divider, Input, Popover } from 'antd';
+import { Button, Checkbox, Divider, Input, Popover, Spin } from 'antd';
 import { FilterFilled, FilterOutlined } from '@ant-design/icons';
 import { FixedSizeList } from 'react-window';
 import { isEqual } from 'lodash';
 
 import { GetValue } from './utils';
 
-const Filter = ({ column, dropdown, id, options, setFilter }) => {
+const Filter = ({ column, dropdown, id, options, setFilter, loading }) => {
 	const [selected, setSelected] = useState(['', ...options.map(d => d.Id)]);
 	const [newOptions, setNewOptions] = useState([{ Id: '', Name: '(Blank)' }, ...options]);
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
@@ -104,7 +104,7 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 			id,
 			selectedAll
 				? isEqual(
-					options,
+						options,
 						newOptions.filter(d => d.Name !== '(Blank)')
 				  )
 					? []
@@ -163,13 +163,24 @@ const Filter = ({ column, dropdown, id, options, setFilter }) => {
 					</div>
 					<Input.Search
 						allowClear
+						disabled={loading}
 						onKeyUp={e => handleSearch(e.target.value)}
 						onSearch={handleSearch}
 						placeholder="Search"
 					/>
-					<FixedSizeList height={150} itemCount={listCount} itemSize={30} width={500}>
-						{Row}
-					</FixedSizeList>
+					{loading ? (
+						<div style={{ display: 'flex', justifyContent: 'center', margin: '15px' }}>
+							<Spin
+								tip="Please wait, while options are loading."
+								size="small"
+								style={{ fontSize: '10pt' }}
+							/>
+						</div>
+					) : (
+						<FixedSizeList height={150} itemCount={listCount} itemSize={30} width={500}>
+							{Row}
+						</FixedSizeList>
+					)}
 				</div>
 				<Divider style={{ margin: '10px 0px' }} />
 				<div>

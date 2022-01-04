@@ -13,6 +13,7 @@ const ColumnReference = ({
 	editable = false,
 	filterIds = [],
 	id,
+	loading = false,
 	multiple,
 	onChange,
 	options = [],
@@ -46,7 +47,7 @@ const ColumnReference = ({
 		Filter: props => {
 			return browser ? (
 				<Suspense fallback={<Skeleton active={true} paragraph={null} />}>
-					<Filter {...props} dropdown={dropdown} id={id} options={filterOptions} />
+					<Filter {...props} dropdown={dropdown} id={id} options={filterOptions} loading={loading} />
 				</Suspense>
 			) : null;
 		}
