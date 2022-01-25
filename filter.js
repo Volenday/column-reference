@@ -42,9 +42,17 @@ const Filter = ({ column, dropdown, id, options, setFilter, loading }) => {
 			const text = item.Id === '' ? item.Name : fields.map(f => GetValue(f, item)).join(separator);
 
 			const finalValue =
-				text.length >= 50 ? (
-					<div style={{ display: 'flex' }}>
-						<span>{text.substr(0, 50).trim()}...</span>
+				text.length >= 55 ? (
+					<div style={{ display: 'flex', width: '100%' }}>
+						<span
+							style={{
+								width: '370px',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								textOverflow: 'ellipsis'
+							}}>
+							{text}
+						</span>
 						<Popover
 							content={
 								<>
@@ -132,7 +140,7 @@ const Filter = ({ column, dropdown, id, options, setFilter, loading }) => {
 			z2aType = sort === 'DESC' ? 'primary' : 'default';
 
 		return (
-			<>
+			<div>
 				<div>
 					<h4>Sort</h4>
 					<Button
@@ -203,7 +211,7 @@ const Filter = ({ column, dropdown, id, options, setFilter, loading }) => {
 						</Button>
 					</div>
 				</div>
-			</>
+			</div>
 		);
 	};
 
