@@ -1,6 +1,6 @@
 {
 	"name": "@volenday/column-reference",
-	"version": "3.2.26",
+	"version": "3.2.27",
 	"private": false,
 	"license": "MIT",
 	"author": "Volenday <developers@volenday.com>",
@@ -16,7 +16,9 @@
 		"react": "^17.0.1",
 		"react-dom": "^17.0.1",
 		"react-hook-form": "^6.7.2",
-		"react-window": "^1.8.6"
+		"react-string-replace": "^0.4.4",
+		"react-window": "^1.8.6",
+		"striptags": "^3.1.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.9",

@@ -1,6 +1,8 @@
 import React, { memo, Suspense, useRef } from 'react';
 import { keyBy } from 'lodash';
 import { Select, Skeleton } from 'antd';
+import reactStringReplace from 'react-string-replace';
+import striptags from 'striptags';
 
 import Filter from './filter';
 
@@ -12,13 +14,15 @@ const ColumnReference = ({
 	dropdown,
 	editable = false,
 	filterIds = [],
+	filterOptions = [],
+	getValue = () => {},
 	id,
+	keywords = '',
 	loading = false,
 	multiple,
 	onChange,
 	options = [],
-	filterOptions = [],
-	getValue = () => {},
+	stripHTMLTags = false,
 	...defaultProps
 }) => {
 	const optionsObj = keyBy(options, 'value');
@@ -35,10 +39,12 @@ const ColumnReference = ({
 							editable,
 							getValue,
 							id,
+							keywords,
 							multiple,
 							onChange,
 							options,
 							optionsObj,
+							stripHTMLTags,
 							styles: { width: '100%' }
 						}}
 					/>
@@ -54,9 +60,54 @@ const ColumnReference = ({
 	};
 };
 
+const removeHTMLEntities = (text, multiple) => {
+	const elem = multiple ? document.createElement('div') : document.createElement('span');
+	return text.replace(/&[#A-Za-z0-9]+;/gi, entity => {
+		elem.innerHTML = entity;
+		return elem.innerText;
+	});
+};
+
+const highlightsKeywords = (keywords, stripHTMLTags = false, toConvert, multiple) => {
+	const strip = stripHTMLTags ? removeHTMLEntities(striptags(toConvert), multiple) : toConvert;
+
+	const replaceText =
+		keywords !== '' ? (
+			reactStringReplace(strip, new RegExp('(' + keywords + ')', 'gi'), (match, index) => {
+				return multiple ? (
+					<div key={`${match}-${index}`} style={{ backgroundColor: 'yellow', fontWeight: 'bold' }}>
+						{match}
+					</div>
+				) : (
+					<span key={`${match}-${index}`} style={{ backgroundColor: 'yellow', fontWeight: 'bold' }}>
+						{match}
+					</span>
+				);
+			})
+		) : multiple ? (
+			<div>{strip}</div>
+		) : (
+			<span>{strip}</span>
+		);
+
+	return replaceText;
+};
+
 const Cell = memo(
 	({
-		other: { dropdown, editable, getValue, id, multiple, onChange, options, optionsObj, styles },
+		other: {
+			dropdown,
+			editable,
+			getValue,
+			id,
+			keywords,
+			multiple,
+			onChange,
+			options,
+			optionsObj,
+			stripHTMLTags,
+			styles
+		},
 		row: { original },
 		value = {}
 	}) => {
@@ -126,10 +177,33 @@ const Cell = memo(
 
 		if (multiple) {
 			if (!Array.isArray(value)) return null;
-			return <div>{value.map(d => fields.map(f => GetValue(f, d)).join(separator)).join(', ')}</div>;
+			return stripHTMLTags
+				? highlightsKeywords(
+						keywords,
+						true,
+						`<div>${value.map(d => fields.map(f => GetValue(f, d)).join(separator)).join(', ')}</div>`
+				  )
+				: highlightsKeywords(
+						keywords,
+						false,
+						`<div>${value.map(d => fields.map(f => GetValue(f, d)).join(separator)).join(', ')}</div>`
+				  );
 		} else {
-			if (typeof dropdown === 'string') return <span>{dropdown}</span>;
-			return <span>{fields.map(f => GetValue(f, value)).join(separator)}</span>;
+			if (typeof dropdown === 'string')
+				return stripHTMLTags
+					? highlightsKeywords(keywords, true, `<span>${dropdown}</span>`)
+					: highlightsKeywords(keywords, false, `<span>${dropdown}</span>`);
+			return stripHTMLTags
+				? highlightsKeywords(
+						keywords,
+						true,
+						`<span>${fields.map(f => GetValue(f, value)).join(separator)}</span>`
+				  )
+				: highlightsKeywords(
+						keywords,
+						false,
+						`<span>${fields.map(f => GetValue(f, value)).join(separator)}</span>`
+				  );
 		}
 	}
 );

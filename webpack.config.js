@@ -60,7 +60,9 @@ module.exports = {
 		react: 'react',
 		'react-dom': 'react-dom',
 		'react-hook-form': 'react-hook-form',
-		'react-window': 'react-window'
+		'react-string-replace': 'react-string-replace',
+		'react-window': 'react-window',
+		striptags: 'striptags'
 	},
 	plugins: [
 		new webpack.optimize.AggressiveMergingPlugin(),
