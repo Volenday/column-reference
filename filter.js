@@ -39,7 +39,13 @@ const Filter = ({ column, dropdown, id, options, setFilter, loading }) => {
 	const Row = useCallback(
 		({ index, style }) => {
 			const item = newOptions[index];
-			const text = item.Id === '' ? item.Name : fields.map(f => GetValue(f, item)).join(separator);
+			const text =
+				item.Id === ''
+					? item.Name
+					: fields
+							.map(f => GetValue(f, item))
+							.filter(f => f.length)
+							.join(separator);
 
 			const finalValue =
 				text.length >= 55 ? (
@@ -101,6 +107,7 @@ const Filter = ({ column, dropdown, id, options, setFilter, loading }) => {
 			options.filter(d =>
 				fields
 					.map(f => GetValue(f, d))
+					.filter(f => f.length)
 					.join(separator)
 					.match(new RegExp(value, 'i'))
 			)
