@@ -197,12 +197,18 @@ const Cell = memo(
 				? highlightsKeywords(
 						keywords,
 						true,
-						`<span>${fields.map(f => GetValue(f, value)).join(separator)}</span>`
+						`<span>${fields
+							.map(f => GetValue(f, value))
+							.filter(f => !!f && f !== '')
+							.join(separator)}</span>`
 				  )
 				: highlightsKeywords(
 						keywords,
 						false,
-						`<span>${fields.map(f => GetValue(f, value)).join(separator)}</span>`
+						`<span>${fields
+							.map(f => GetValue(f, value))
+							.filter(f => !!f && f !== '')
+							.join(separator)}</span>`
 				  );
 		}
 	}
