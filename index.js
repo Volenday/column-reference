@@ -3,6 +3,7 @@ import { keyBy } from 'lodash';
 import { Select, Skeleton } from 'antd';
 import reactStringReplace from 'react-string-replace';
 import striptags from 'striptags';
+import { words } from 'lodash';
 
 import Filter from './filter';
 
@@ -70,10 +71,11 @@ const removeHTMLEntities = (text, multiple) => {
 
 const highlightsKeywords = (keywords, stripHTMLTags = false, toConvert, multiple) => {
 	const strip = stripHTMLTags ? removeHTMLEntities(striptags(toConvert), multiple) : toConvert;
+	const regxWords = keywords ? words(keywords, /[a-zA-Z0-9]+/gi).join('.+') : '';
 
 	const replaceText =
 		keywords !== '' ? (
-			reactStringReplace(strip, new RegExp('(' + keywords + ')', 'gi'), (match, index) => {
+			reactStringReplace(strip, new RegExp('(' + regxWords + ')', 'i'), (match, index) => {
 				return multiple ? (
 					<div key={`${match}-${index}`} style={{ backgroundColor: 'yellow', fontWeight: 'bold' }}>
 						{match}
